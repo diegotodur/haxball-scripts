@@ -28,7 +28,7 @@ function updateAdmins() { //Haxball Headless Documentation Example
 
 room.onPlayerJoin = function(player) {
   updateAdmins();
-		room.sendAnnouncement(`🛎 Bienvenido @${player.name}! unete a nuestro discord! discord.gg/example`, player.id, AnnounceColor, "normal");
+  room.sendAnnouncement(`🛎 Bienvenido @${player.name}! unete a nuestro discord! discord.gg/example`, player.id, AnnounceColor, "normal");
 }
 
 room.onPlayerLeave = function(player) {
