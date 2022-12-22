@@ -4,7 +4,7 @@ const maxPlayers = 20;
 const roomPassword = null;
 const roomPublic = true;
 const token = "thr1.AAAAAGOjnxggTBEasjRf5A.u1GPogOIPTA"; // get you Haxball Token in https://www.haxball.com/headlesstoken 
-
+const AnnounceColor = "0xB04A5E"
 var room = HBInit({
 	roomName: roomName,
 	password: roomPassword,
@@ -28,6 +28,7 @@ function updateAdmins() { //Haxball Headless Documentation Example
 
 room.onPlayerJoin = function(player) {
   updateAdmins();
+		room.sendAnnouncement(`🛎 Bienvenido @${player.name}! unete a nuestro discord! discord.gg/example`, player.id, AnnounceColor, "normal");
 }
 
 room.onPlayerLeave = function(player) {
