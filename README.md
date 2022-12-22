@@ -18,7 +18,7 @@ Una vez tengas en mano tu codigo sigue las siguientes instrucciones:
 
 ### Documentacion Haxball Headless 🔧
 
-_Haxball es un juego multijugador 2d basado en la logica de equipos, al ser programado en Javascript este posee su propias clases y objetos, por tanto, si quieres adquirir un nivel avanzado de conocimiento deberas saber utilizar estos._
+_Haxball es un juego multijugador 2d basado en la logica de equipos, este posee su propias clases y objetos, por tanto, si quieres adquirir un nivel avanzado de conocimiento deberas saber utilizar estos._
 
 _Documentacion_
 
