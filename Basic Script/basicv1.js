@@ -1,41 +1,90 @@
-const roomName = "Haxball Headless by itsmisce";
-document.title = roomName;
-const maxPlayers = 10; //max 30 players
-const roomPassword = null; //change for your password if you liked. like this: const roomPassword = "mypassword";
-const roomPublic = true; //false for privated room, true for public room
-const token = ""; // get you Haxball Token in https://www.haxball.com/headlesstoken 
+//Funcion para mandar anuncios
+const announce = (msg, targetId, color = config.getColor('anuncio'), style = "normal", sound = 0) => {
+	room.sendAnnouncement(msg, targetId, color, style, sound);
+};
 
-let colors = {
-  announce: "0xB04A5E"
+//Actualizar admins
+const updateAdmins = () => {
+	var players = room.getPlayerList();
+	if (players.length == 0) return;
+	if (players.find((player) => player.admin) != null) return;
+	room.setPlayerAdmin(players[0].id, true);
 }
-var room = HBInit({
-  roomName: roomName,
-  password: roomPassword,
-  maxPlayers: maxPlayers,
-  public: roomPublic,
-  noPlayer: true,
-  geo: { "code": "CL", "lat": -30, "lon": -70 },
-  token: token,
+
+//Si la sala esta vacia, se pausa el juego.
+const pausarSalaVacia = () => {
+	var players = room.getPlayerList();
+ 	if ( players.length == 0 ){
+		room.stopGame()
+	}
+}
+
+class Config {
+	constructor() {
+	  this.roomName = 'Haxball Scripts';
+	  this.password = '123456';
+	  this.maxPlayers = 10;
+	  this.noPlayer = true;
+	  this.public = false;
+  
+	  //Puedes agregar mas colores con el formato 0xHedecimal, luego puedes llamarlo en tus funciones como getColor('nombre')
+	  this.colores = {
+		anuncio: '0x5190CE',
+		golRed: '0xC93C3C',
+	  };
+  
+	  //Puedes agregar mas mensajes, luego puedes llamarlo en tus funciones como getMessage('nombre')
+	  this.mensajes = {
+		anuncioBienvenida: ', bienvenido a la sala!',
+	  };
+	}
+  
+	setColor(key, color) {
+	  this.colores[key] = color;
+	}
+  
+	getColor(key) {
+	  return this.colores[key];
+	}
+  
+	setMessage(key, message) {
+	  this.mensajes[key] = message;
+	}
+  
+	getMessage(key) {
+	  return this.mensajes[key];
+	}
+}
+const config = new Config();
+
+const room = HBInit({
+	roomName: config.roomName,
+	maxPlayers: config.maxPlayers,
+	noPlayer: config.noPlayer,
+	public: config.public
 });
 
-room.setDefaultStadium("Big"); //Default Haxball Maps
-room.setScoreLimit(3);
-room.setTimeLimit(3);
 
-function updateAdmins() { //Haxball Headless Documentation Example
-  let players = room.getPlayerList();
-  if (players.length == 0) return;
-  if (players.find((player) => player.admin) != null) return;
-  room.setPlayerAdmin(players[0].id, true);
-}
+const players = []
 
 room.onPlayerJoin = function (player) {
-  updateAdmins();
-  room.sendAnnouncement(`🛎 Bienvenido @${player.name}! unete a nuestro discord! discord.gg/example`, player.id, colors.announce, "normal");
+	updateAdmins();
+
+	const auth = player.auth;
+	const nombre = player.name
+	const msj = `Hola ${player.name}, ${getMessage('anuncioBienvenida')}`;
+	announce(msj, player.id);
+
+	const playerObject = {
+      id: player.id,
+      name: nombre,
+      auth: auth
+    };
+
+	players.push(playerObject)
 }
 
 room.onPlayerLeave = function (player) {
-  updateAdmins();
+	updateAdmins();
+	pausarSalaVacia();
 }
-
-
